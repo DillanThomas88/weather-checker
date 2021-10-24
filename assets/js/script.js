@@ -1,4 +1,4 @@
-var searchHistory = [];
+var dataArray = [];
 var weatherApiRootUrl = 'https://api.openweathermap.org';
 var weatherApiKey = 'd91f911bcf2c0f925fb6535547a5ddc9';
 var input = document.querySelector('#search-input');
@@ -13,34 +13,34 @@ dayjs.extend(window.dayjs_plugin_timezone);
 function renderSearchHistory() {
   storedData.innerHTML = '';
 
-  for (var i = searchHistory.length - 1; i >= 0; i--) {
+  for (var i = dataArray.length - 1; i >= 0; i--) {
     var btn = document.createElement('button');
     btn.setAttribute('type', 'button');
     btn.setAttribute('aria-controls', 'today forecast');
     btn.classList.add('history-btn', 'btn-history','button','is-link');
     btn.style.margin = '5px'
 
-    btn.setAttribute('data-search', searchHistory[i]);
-    btn.textContent = searchHistory[i];
+    btn.setAttribute('data-search', dataArray[i]);
+    btn.textContent = dataArray[i];
     storedData.append(btn);
   }
 }
 
 function appendToHistory(search) {
 
-  if (searchHistory.indexOf(search) !== -1) {
+  if (dataArray.indexOf(search) !== -1) {
     return;
   }
-  searchHistory.push(search);
+  dataArray.push(search);
 
-  localStorage.setItem('search-history', JSON.stringify(searchHistory));
+  localStorage.setItem('search-history', JSON.stringify(dataArray));
   renderSearchHistory();
 }
 
 function initSearchHistory() {
   var storedHistory = localStorage.getItem('search-history');
   if (storedHistory) {
-    searchHistory = JSON.parse(storedHistory);
+    dataArray = JSON.parse(storedHistory);
   }
   renderSearchHistory();
 }
@@ -218,7 +218,6 @@ function handleSearchHistoryClick(e) {
   var search = btn.getAttribute('data-search');
   fetchCoords(search);
 }
-
 initSearchHistory();
 search.addEventListener('submit', handleSearchFormSubmit);
 storedData.addEventListener('click', handleSearchHistoryClick);
